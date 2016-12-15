@@ -90,7 +90,7 @@ pipeline-netflix-eureka:
        MEMORY: "128"
        MIN_INSTANCES: "1"
        MAX_INSTANCES: "3"
-       DESIRED_INSTANCES: "2"
+       DESIRED_INSTANCES: "1"
        NEW_RELIC_LICENSE: "{{deploy.parameters.new-relic-lic-key}}"
       execute: false
 
