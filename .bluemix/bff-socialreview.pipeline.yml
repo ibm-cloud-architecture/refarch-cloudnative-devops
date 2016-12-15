@@ -57,6 +57,7 @@ stages:
       # set orgs
       CHARLST="[@|.|-|_]"
       ORGS=$(echo $ORG|sed "s/$CHARLST//g")-$SPACE
+      ORGS=$(echo $ORGS|tr '[:upper:]' '[:lower:]')
       # Set Zuul proxy url
       echo "set zuul url..."
       /bin/bash set-zuul-proxy-url.sh -c $CTXPATH -m $SOCIALREVIEW_MSNAME -z $ZUUL_PROXY_URL
@@ -66,7 +67,7 @@ stages:
       npm install -g apiconnect
       echo -e "completed installing apic cli"
       echo "yes" | apic
-
+      echo "no" | apic
       echo -e "Publish the socialreview bff app"
 
       apic login -u $APIC_USER -p $APIC_PASS -s ${APIC_URL}
