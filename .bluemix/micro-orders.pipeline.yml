@@ -105,6 +105,9 @@ stages:
   - name: APP_NAME
     value: 'orders-microservice'
     type: text
+  - name: REGION
+    value: ${REGION_US}
+    type: text
   - name: ROUTE_HOSTNAME
     value: ${NAME_US}
     type: text
