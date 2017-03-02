@@ -116,7 +116,7 @@ stages:
     value: '3'
     type: text
   - name: DESIRED_INSTANCES
-    value: '1'
+    value: '2'
     type: text
   - name: EUREKA_REGISTRY_URL
     value: ${EUREKA_REGISTRY_URL_US}
@@ -138,7 +138,7 @@ stages:
       organization: ${ORG}
       space: ${SPACE}
     PORT: ${PORT}
-    OPTIONAL_ARGS: -m ${MEMORY} -e eureka.instance.nonSecurePort=80 -e eureka.instance.preferIpAddress=false
+    OPTIONAL_ARGS: -m ${MEMORY} -e eureka.instance.nonSecurePort=80 -e eureka.instance.preferIpAddress=true
     CONTAINER_NAME: ${ROUTE_HOSTNAME}
     DEPLOY_TYPE: red_black
     COMMAND: |-
@@ -323,7 +323,7 @@ stages:
     value: '3'
     type: text
   - name: DESIRED_INSTANCES
-    value: '1'
+    value: '2'
     type: text
   - name: EUREKA_REGISTRY_URL
     value: ${EUREKA_REGISTRY_URL_EU}
@@ -345,7 +345,7 @@ stages:
       organization: ${ORG}
       space: ${SPACE}
     PORT: ${PORT}
-    OPTIONAL_ARGS: -m 128 -e eureka.instance.nonSecurePort=80 -e eureka.instance.preferIpAddress=false
+    OPTIONAL_ARGS: -m 128 -e eureka.instance.nonSecurePort=80 -e eureka.instance.preferIpAddress=true
     CONTAINER_NAME: ${ROUTE_HOSTNAME}
     DEPLOY_TYPE: red_black
     COMMAND: |-

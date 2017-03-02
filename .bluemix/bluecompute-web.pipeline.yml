@@ -99,21 +99,29 @@ stages:
         fi
 
         # create objectstorage service and key
-        objstorage_svc="cloudnative-objstore"
+        set +e
+        cf services | grep Object-Storage
+        if [ $? -eq 1 ]; then
+            set -e
+            cf cs Object-Storage standard cloudnative-objstore
+            for i in {1..5}
+            do
+                status=$(cf service "${objstorage_svc}"|grep -i 'status:'|awk '{print $NF}')
+                case $status in
+                    "progress") sleep 10;;
+                    "succeeded") break;;
+                    *) sleep 10;;
+                 esac
+            done
+        fi
+        objstorage_svc=$(cf services | grep Object-Storage | sed "s/\(.*\)\(Object-Storage\)\(.*\)/\1/" | sed 's/^[ \t]*//;s/[ \t]*$//')
+        set +e
+        cf service-keys "${objstorage_svc}" | grep "No service key for service instance"
+        [ $? -eq 0 ] && cf csk "${objstorage_svc}" "admin1"
+        set -e
+        objstorage_key_name=$(cf service-keys "${objstorage_svc}" | tail -1 | sed 's/^[ \t]*//;s/[ \t]*$//')
+        objstorage_keys=$(cf service-key "${objstorage_svc}" "${objstorage_key_name}" | grep -v "Getting key ")
         objstorage_container="bluecompute"
-        cf create-service Object-Storage Free ${objstorage_svc}
-        for i in {1..5}
-        do
-            status=$(cf service ${objstorage_svc}|grep -i 'status:'|awk '{print $NF}')
-            case $status in
-                 "progress") sleep 10;;
-                 "succeeded") break;;
-                 *) sleep 10;;
-            esac
-        done
-        cf create-service-key ${objstorage_svc} admin1
-
-        set -x
 
         # set orgs
         CHARLST="[@|.|-|_]"
@@ -123,7 +131,8 @@ stages:
         CATALOG=bluecompute
         AUTH_HEADER=`echo -n "${APIC_USER}:${APIC_PASS}" | base64`
 
-        # create org for user with apic
+        # create org for user with apic in US
+        APIC_URL=${APIC_URL_US}
         ORG_ID=`curl -k \
             -H "X-IBM-APIManagement-Context: ${ORGS}.${CATALOG}" \
             -H "Authorization: Basic ${AUTH_HEADER}" \
