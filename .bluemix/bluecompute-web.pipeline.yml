@@ -99,6 +99,7 @@ stages:
         fi
 
         # create objectstorage service and key
+
         set +e
         cf services | grep Object-Storage
         if [ $? -eq 1 ]; then
@@ -254,10 +255,12 @@ stages:
         cf push "${CF_APP}" -n "${CF_APP}" -d "${APP_DOMAIN}" --no-start
 
         # create route
-        cf domains | grep ${ROUTE_DOMAIN_BFF_WEB}
-        [ $? -eq 0 ] && echo "Domain exists" || cf create-domain ${CF_ORG} ${ROUTE_DOMAIN_BFF_WEB}
-        cf map-route ${CF_APP} ${ROUTE_DOMAIN_BFF_WEB} --hostname ${ROUTE_HOSTNAME_BFF_WEB}
-
+        if [[ "${CF_SPACE}" == "cloudnative-prod" ]]; then
+          cf domains | grep ${ROUTE_DOMAIN_BFF_WEB}
+          [ $? -eq 0 ] && echo "Domain exists" || cf create-domain ${CF_ORG} ${ROUTE_DOMAIN_BFF_WEB}
+          cf map-route ${CF_APP} ${ROUTE_DOMAIN_BFF_WEB} --hostname ${ROUTE_HOSTNAME_BFF_WEB}
+        fi
+        
         # start app
         cf bind-service "${CF_APP}" "${objstorage_svc}"
         cf set-env "${CF_APP}" NEW_RELIC_LICENSE_KEY "${NEW_RELIC_LICENSE}"
@@ -531,9 +534,11 @@ stages:
         cf push "${CF_APP}" -n "${CF_APP}" -d "${APP_DOMAIN}" --no-start
 
         # create route
-        cf domains | grep ${ROUTE_DOMAIN_BFF_WEB}
-        [ $? -eq 0 ] && echo "Domain exists" || cf create-domain ${CF_ORG} ${ROUTE_DOMAIN_BFF_WEB}
-        cf map-route ${CF_APP} ${ROUTE_DOMAIN_BFF_WEB} --hostname ${ROUTE_HOSTNAME_BFF_WEB}
+        if [[ "${CF_SPACE}" == "cloudnative-prod" ]]; then
+          cf domains | grep ${ROUTE_DOMAIN_BFF_WEB}
+          [ $? -eq 0 ] && echo "Domain exists" || cf create-domain ${CF_ORG} ${ROUTE_DOMAIN_BFF_WEB}
+          cf map-route ${CF_APP} ${ROUTE_DOMAIN_BFF_WEB} --hostname ${ROUTE_HOSTNAME_BFF_WEB}
+        fi
 
         # start app
         cf bind-service "${CF_APP}" "${objstorage_svc}"
