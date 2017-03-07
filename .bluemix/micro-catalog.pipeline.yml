@@ -145,6 +145,7 @@ stages:
       organization: ${ORG}
       space: ${SPACE}
     PORT: ${PORT}
+
     OPTIONAL_ARGS: -m ${MEMORY}
     CONTAINER_NAME: ${NAME_US}
     DEPLOY_TYPE: red_black

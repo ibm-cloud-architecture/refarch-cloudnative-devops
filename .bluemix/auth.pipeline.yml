@@ -339,6 +339,7 @@ stages:
       space: ${SPACE}
     OPTIONAL_ARGS: -m ${MEMORY}
     PORT: ${PORT}
+
     CONTAINER_NAME: ${ROUTE_HOSTNAME}
     DEPLOY_TYPE: red_black
     COMMAND: |-
