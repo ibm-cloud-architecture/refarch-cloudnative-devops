@@ -3,9 +3,14 @@ FROM ubuntu:16.04
 # Install needed packages
 RUN apt-get update
 RUN apt-get install -y ca-certificates uuid-runtime jq
-RUN apt-get install -y curl
+RUN apt-get install -y curl sudo
 ADD https://github.com/mikefarah/yaml/releases/download/1.8/yaml_linux_amd64 /usr/local/bin/yaml
 RUN chmod a+x /usr/local/bin/yaml
+
+# Install helm
+ADD https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get /tmp/get_helm.sh
+RUN chmod 700 /tmp/get_helm.sh
+RUN sudo bash /tmp/get_helm.sh
 
 # Gradle
 RUN apt-get install -y gradle
@@ -54,9 +59,7 @@ RUN bx plugin install container-service -r Bluemix
 # Install Container Rervice plugin
 RUN bx plugin install container-registry -r Bluemix
 
-# Install helm
-ADD https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get /tmp/get_helm.sh
-RUN sh /tmp/get_helm.sh
+
 
 #USER root
 
