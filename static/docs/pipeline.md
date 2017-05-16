@@ -61,7 +61,7 @@ export PATH=$JAVA_HOME/bin:$PATH
 ./gradlew build -x test
 ./gradlew docker
 ls -al docker
-cp docker/* .
+cp -R docker/* .
 echo "gradle build done"
 
 # The following colors have been defined to help with presentation of logs: green, red, label_color, no_color.  
